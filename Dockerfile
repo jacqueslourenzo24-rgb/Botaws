@@ -1,6 +1,6 @@
 # Usar uma imagem base de PHP com o Lambda Runtime Interface Client (RIC)
 # aws/aws-lambda-php-runtime:8.2 é uma imagem oficial da AWS para PHP no Lambda.
-FROM public.ecr.aws/lambda/php-82-fpm:latest
+FROM public.ecr.aws/docker/library/php:8.2-fpm
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR ${LAMBDA_TASK_ROOT}
