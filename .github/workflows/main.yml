@@ -9,6 +9,7 @@ env:
   AWS_REGION: us-east-2
   ECR_REPOSITORY: telegram-bot-php-repo
   AWS_ACCOUNT_ID: 597088015325 # Seu ID de conta AWS
+  IMAGE_TAG: latest # Definir a tag aqui globalmente para fácil acesso
 
 jobs:
   build-and-push:
@@ -29,12 +30,18 @@ jobs:
       id: login-ecr
       uses: docker/login-action@v3
       with:
+        # A URL do registro é formada diretamente aqui usando as variáveis de ambiente globais
         registry: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
     - name: Build and Push Docker image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        # Definir a URL completa do registro ECR para uso direto nos comandos docker
+        # Isso garante que a string seja formada corretamente antes de ser passada
+        ECR_REGISTRY_URL="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+        
+        # Construir a imagem Docker com a tag completa e correta
+        # O $ECR_REGISTRY_URL garante que não haverá uma barra inicial desnecessária
+        docker build -t "$ECR_REGISTRY_URL/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}" .
+        
+        # Enviar a imagem para o ECR
+        docker push "$ECR_REGISTRY_URL/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
