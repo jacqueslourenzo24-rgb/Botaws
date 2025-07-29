@@ -1,11 +1,6 @@
 {
-    "name": "u0_a427/meu-bot-php",
-    "autoload": {
-        "psr-4": {
-            "U0A427\\MeuBotPhp\\": "src/"
-        }
-    },
     "require": {
-        "irazasyed/telegram-bot-sdk": "^3.15"
+        "irazasyed/telegram-bot-sdk": "^3.12",
+        "aws/aws-sdk-php": "^3.284"
     }
 }
