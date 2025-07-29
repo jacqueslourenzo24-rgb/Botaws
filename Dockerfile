@@ -14,10 +14,13 @@ COPY . /var/task
 RUN docker-php-ext-install curl mbstring zip
 
 # Instala o Composer (se ainda não estiver na imagem) e as dependências
-# Usamos apt-get para instalar 'unzip' e 'git', pois a imagem é baseada em Debian.
+# Usamos apt-get para instalar 'unzip' e 'git', e as libs de desenvolvimento para as extensões PHP.
 RUN apt-get update && apt-get install -y \
     unzip \
     git \
+    libcurl4-openssl-dev \
+    libzip-dev \
+    libonig-dev \
     && rm -rf /var/lib/apt/lists/* # Limpa o cache para reduzir o tamanho da imagem
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
